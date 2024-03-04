@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="src/main/resources/static/script.js"></script>
+
+  <script type="text/javascript" src=""></script>
+  <link rel="icon" type="image/png" href="panda.png">
+  <title>MojAsistent</title>
+</head>
+<script>
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics();
+  const messaging = firebase.messaging();
+
+
+
+messaging.onMessage(async (payload) => {
+console.log('Poruka primljena. ', payload);
+const notificationTitle = payload.notification.title;
+const notificationBody = payload.notification.body;
+
+// Prikazivanje SweetAlert notiikacije
+Swal.fire({
+title: notificationTitle,
+text: notificationBody,
+imageUrl: 'resources/static/panda.png', // Postavite URL za ikonu ako je potrebno
+showDenyButton: true,
+showCancelButton: true,
+confirmButtonText: 'Popio sam',
+denyButtonText: 'Nisam popio',
+}).then(async (result) => {
+if (result.isConfirmed) {
+// Korisnik kliknuo "Popio sam"
+const token = await getTokenFromCache('/token');
+if (token) {
+  await sendDataToServer('https://mojasistenttestenvironment-e209f0bbc59e.herokuapp.com/spremiReminder', { action: 'popio', token });
+}
+} else if (result.isDenied) {
+// Korisnik kliknuo "Nisam popio"
+const token = await getTokenFromCache('/token');
+if (token) {
+  await sendDataToServer('https://mojasistenttestenvironment-e209f0bbc59e.herokuapp.com/spremiNoReminder', { action: 'nisam_popio', token });
+}
+}
+});
+});
+
+async function getTokenFromCache(tokenURL) {
+try {
+const response = await caches.match(tokenURL);
+if (response) {
+const token = await response.text();
+console.log('Token dohvaćen iz cache-a:', token);
+return token;
+} else {
+console.log('Token nije pronađen u cache-u.');
+return null;
+}
+} catch (error) {
+console.error('Error retrieving token from cache:', error);
+return null;
+}
+}
+
+async function sendDataToServer(url, data) {
+try {
+const response = await fetch(url, {
+method: 'POST',
+headers: {
+  'Content-Type': 'application/json',
+},
+body: JSON.stringify(data),
+});
+
+console.log('Server response:', response);
+} catch (error) {
+console.error('Error sending data:', error);
+}
+}
+</script>
+<body oncontextmenu="return false" class="snippet-body like">
+<div class="flex1">
+  <button onclick="javascript:history.back()" class="wrapper" style="width:25%; max-width: 82px; padding: 8px 8px 8px 8px;">
+    <img src="backarrow_logo.png">
+  </button>
+
+  <button th:onclick="window.location.href = '/form-01?id=[[${currPatient.id}]]&password=[[${currPatient.password}]]'" class="wrapper" style="width:25%; max-width: 82px;padding: 8px 8px 8px 8px;">
+    <img src="home_logo.png">
+  </button>
+
+</div>
+<div class="flex2">
+
+<div class="wrapper" style="font-weight:500; text-align:center;">
+  <img src="panda.png"  style="width:50%">
+  <p th:text = "'Hvala ti što si ovo podijelio/la sa mnom ' + ${currPatient.firstName} + '. Vidimo se idući put!'" style="margin-top: 32px; ">
+  </p>
+  <button th:onclick="|window.location.href = '/toIzbornik?id=${currPatient.id}'|" type="button"
+          class="button-next">IZAĐI
+  </button>
+</div>
+</div>
+</body>
+</html>

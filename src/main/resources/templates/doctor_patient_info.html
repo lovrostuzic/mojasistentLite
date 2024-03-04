@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+          crossorigin="anonymous"></script>
+  <script type="text/javascript" src=""></script>
+  <link rel="icon" type="image/png" href="panda.png">
+  <style>
+        .button-next{
+    margin: 32px 32px 0px 32px;
+    padding: 1rem;
+    border-color:white;
+    font-weight: 400;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    color: #dcdcdc;
+
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+     background-color: #2cba00;
+}
+
+
+    </style>
+  <title>MojAsistent</title>
+</head>
+<body>
+<div class="container" style="min-height:calc(100vh - 24px); text-align: center;">
+  <div class="row" style="justify-content: space-between;">
+    <div class="col-auto mt-4">
+      <img src="panda.png" alt="toplomjer" height="124px" width="70px" class="img-fluid">
+    </div>
+
+    <div class="col-auto mt-4" style="font-weight: bold;" >
+      <img src="user2.png" alt="user_logo"  height="100px" width="100px" class="img-fluid">
+
+      <!-- tu treba preuzeti ime i prezime palijativnog usera, ne znam kak su ti nazivi u kodu -->
+
+      <div th:text="${currPatient.firstName} + ' '  + ${currPatient.lastName}" class="col mt-3"></div>
+    </div>
+  </div>
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-4 col-md-8">
+
+      <!-- tu ubaciti ime pacijenta kojeg se pregledava -->
+
+    </div>
+
+  </div>
+
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-4 col-md-8">
+
+      <table id="patientInfoTable" class="table table-hover">
+        <thead class="table-secondary">
+        <tr>
+          <th>Datum i vrijeme</th>
+          <th>Razina zadovoljstva(1 - 5)</th>
+          <th>Razina boli (1 - 10)</th>
+        </tr>
+        </thead>
+
+        <!-- to pospojiti -->
+
+        <tbody>
+        <tr th:each ="user : ${recordList}">
+          <td th:text="${record.date}"></td>
+          <td th:text="${record.happinessLevel}"></td>
+          <td th:text="${record.painLevel}"></td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+<footer style = "text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif;" >@Toplomjer 2023 Health IT. All rights reserved.</footer>
+
+</body>
+
+</html>

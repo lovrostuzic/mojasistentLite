@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MojAsistent</title>
+  <link rel="icon" type="image/png" href="panda.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="stil2.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="panda.png" href="panda.png">
+  <style>
+
+    .range-slider .input-range {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background: #ccc;
+      outline: none;
+    }
+    .input-value {text-align: center;}
+    .range-slider .input-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #353535;
+      cursor: pointer;
+      -webkit-transition: background .15s ease-in-out;
+      transition: background .15s ease-in-out;
+    }
+    .range-slider .input-range::-webkit-slider-thumb:hover {
+      background: #e06161;
+    }
+    .range-slider .input-range:active::-webkit-slider-thumb {
+      background: #e06161;
+    }
+    .range-slider .input-range::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: 0;
+      border-radius: 50%;
+      background: #353535;
+      cursor: pointer;
+      -webkit-transition: background .15s ease-in-out;
+      transition: background .15s ease-in-out;
+    }
+    .range-slider .input-range::-moz-range-thumb:hover {
+      background: #e06161;
+    }
+    .range-slider .input-range:active::-moz-range-thumb {
+      background: #e06161;
+    }
+    .range-slider .range-value {
+      display: inline-block;
+      position: relative;
+      width: 60px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 3px;
+      background: #353535;
+      padding: 5px 10px;
+      margin-left: 7px;
+    }
+    .range-slider .range-value:after {
+      position: absolute;
+      top: 8px;
+      left: -7px;
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-right: 7px solid #353535;
+      border-bottom: 7px solid transparent;
+      content: '';
+    }
+
+    ::-moz-range-track {
+      background: #ccc;
+      border: 0;
+    }
+
+    input::-moz-focus-inner {
+      border: 0;
+    }
+
+
+  </style>
+</head>
+<body>
+<div class="parent">
+  <div class="div1"><img src="logo.png" style="width: 90px; height: 80px; padding-right: 20px;"></div>
+  <div class="div2"></div>
+  <div class="div3"><img src="user.png" style="width: 80px; height: 80px; margin-left: 250px;"></div>
+  <div class="div4"><h5 style="text-align: center; padding-top: 50px; column-width: 20px; column-count: 1;">Dobar dan Ana, povucite slider prema razini boli koju trenutno osjećate, od 1 - ne osjećam nikakvu bol do 10 -
+    bol je nepodnošljiva, trebam veću dozu lijekova za bol.</h5></div>
+  <div class="div5">
+  </div>
+  <div class="div6">
+    <div class="range-slider">
+      <input class="input-range" type="range" name="ageInputName" id="ageInputId" value="1" step="1" min="1" max="10" oninput="ageOutputId.value = ageInputId.value">
+      <div class="input-value"><span></span><output name="ageOutputName" id="ageOutputId">10</output></div>
+    </div>
+  </div>
+  <div class="div7"><h5 style="text-align: center; padding-top: 50px;">
+    Odabranu bol dodatno objasnite svojim riječima, ili napišite poruku svom palijativnom koordinatoru:</h5>
+  </div>
+  <div class="div8">
+    <form action="" style="text-align: center; padding-top: 50px; max-width: none;">
+      <textarea id="tekst" name="tekst" rows="5" cols="40">Unesite poruku ovdje</textarea>
+      <br>
+    </form>
+  </div>
+  <div class="div9"></div>
+  <div class="div10"></div>
+  <!--<div class="div11"></div>
+    <div class="div12"></div>
+ <div class="div13"></div>
+ <div class="div14"></div>-->
+ <div class="div15"><h4 style="text-align: center; margin-top: 25px;"><button style="padding: 7px; border-radius: 5px; padding-left: 30px; padding-right: 30px;">
+   <a href="" target="_blank" style="text-decoration:none; color: black;">Pošalji</a></button></h4></div>
+
+
+</div>
+</body>
+</html>

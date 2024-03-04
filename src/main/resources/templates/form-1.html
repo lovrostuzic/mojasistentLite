@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script type="text/javascript" src=""></script>
+    <script src="src/main/resources/static/script.js"></script>
+    <link rel="icon" type="image/png" href="panda.png">
+    <title>MojAsistent</title>
+</head>
+<script>
+  
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const messaging = firebase.messaging();
+
+
+
+messaging.onMessage(async (payload) => {
+console.log('Poruka primljena. ', payload);
+const notificationTitle = payload.notification.title;
+const notificationBody = payload.notification.body;
+
+// Prikazivanje SweetAlert notiikacije
+Swal.fire({
+title: notificationTitle,
+text: notificationBody,
+imageUrl: 'resources/static/panda.png', // Postavite URL za ikonu ako je potrebno
+showDenyButton: true,
+showCancelButton: true,
+confirmButtonText: 'Popio sam',
+denyButtonText: 'Nisam popio',
+}).then(async (result) => {
+if (result.isConfirmed) {
+  // Korisnik kliknuo "Popio sam"
+  const token = await getTokenFromCache('/token');
+  if (token) {
+    await sendDataToServer('https://mojasistent-437c02d59cdb.herokuapp.com/spremiReminder', { action: 'popio', token });
+  }
+} else if (result.isDenied) {
+  // Korisnik kliknuo "Nisam popio"
+  const token = await getTokenFromCache('/token');
+  if (token) {
+    await sendDataToServer('https://mojasistent-437c02d59cdb.herokuapp.com/spremiNoReminder', { action: 'nisam_popio', token });
+  }
+}
+});
+});
+
+async function getTokenFromCache(tokenURL) {
+try {
+const response = await caches.match(tokenURL);
+if (response) {
+  const token = await response.text();
+  console.log('Token dohvaćen iz cache-a:', token);
+  return token;
+} else {
+  console.log('Token nije pronađen u cache-u.');
+  return null;
+}
+} catch (error) {
+console.error('Error retrieving token from cache:', error);
+return null;
+}
+}
+
+async function sendDataToServer(url, data) {
+try {
+const response = await fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+});
+
+console.log('Server response:', response);
+} catch (error) {
+console.error('Error sending data:', error);
+}
+}
+</script>
+<body oncontextmenu="return false" class="snippet-body like" style="display:block">
+
+<div style="display:flex; justify-content:space-between;margin-bottom:24px;">
+    <button onclick="javascript:history.back()" class="wrapper"
+            style="width:25%; max-width: 82px; padding: 8px 8px 8px 8px;">
+        <img src="backarrow_logo.png">
+    </button>
+
+    <button th:onclick="window.location.href = '/form-01?id=[[${currPatient.id}]]&password=[[${currPatient.password}]]'"
+            class="wrapper" style="width:25%; max-width: 82px;padding: 8px 8px 8px 8px;">
+        <img src="home_logo.png">
+    </button>
+
+</div>
+<div class="flex2">
+
+    <div class="wrapper">
+
+
+        </p>
+        <p style="margin-bottom: 32px; text-align:center; font-weight:500">
+            Kako se osjećas danas?
+        </p>
+        <div class="section">
+            <ul class="emojis">
+                <li class="slide-emoji"><img src="emoji1.png" alt="" width="140px"></li>
+                <li><img src="emoji2.png" alt="" width="140px"></li>
+                <li><img src="emoji3.png" alt=""></li>
+                <li><img src="emoji4.png" alt=""></li>
+                <li><img src="emoji5.png" alt=""></li>
+            </ul>
+        </div>
+
+        <div class="slider">
+            <div class="thumb"><span></span></div>
+            <div class="progress-bar"></div>
+            <form action="form-2">
+                <input type="range" name="happinessLevel" min="0" value="50" max="100">
+
+
+
+                <div style="display: flex; align-items: center; justify-content: center; margin-top: 50px;">
+                    <button type="submit" class="button-next">DALJE</button>
+                </div>
+        </form>
+        </div>
+    </div>
+</div>
+        <script type="text/javascript">
+            const body = document.querySelector("body");
+            const emoji = document.querySelector(".slide-emoji");
+            const input = document.querySelector("input");
+            const bar = document.querySelector(".progress-bar");
+            const thumb = document.querySelector(".thumb");
+                                emoji.style.marginTop = "-280px";
+  body.classList.add("confuse");
+                    body.classList.remove("angry");
+                    body.classList.remove("like");
+            input.oninput = () => {
+                let sliderValue = input.value;
+                thumb.style.left = sliderValue + '%';
+                bar.style.width = sliderValue + '%';
+                if (sliderValue < 20) {
+                emoji.style.marginTop = "0px";
+                 body.classList.add("angry");
+                  body.classList.remove("confuse");
+                   body.classList.remove("like"); }
+                 if (sliderValue >= 20) {
+                    emoji.style.marginTop = "-140px";
+                    body.classList.add("confuse");
+                    body.classList.remove("angry");
+                    body.classList.remove("like");
+                }
+                if (sliderValue >= 40) {
+                    emoji.style.marginTop = "-280px";
+                }
+                if (sliderValue >= 60) {
+                    emoji.style.marginTop = "-420px";
+                    body.classList.add("like");
+                    body.classList.remove("confuse");
+                    body.classList.remove("angry");
+                }
+                if (sliderValue >= 80) {
+                    emoji.style.marginTop = "-560px";
+                }
+            }
+        </script>
+</body>
+</html>

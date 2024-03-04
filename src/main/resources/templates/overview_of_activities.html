@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="panda.png">
+    <title>MojAsistent</title>
+</head>
+<body oncontextmenu="return false" class="snippet-body like" >
+<div style="display:flex; justify-content:space-between;margin-bottom:24px;padding-bottom:16px">
+
+    <button onclick="javascript:history.back()" class="wrapper" style="width:25%; max-width: 82px; padding: 8px 8px 8px 8px;">
+        <img src="backarrow_logo.png">
+    </button>
+
+    <button th:onclick="window.location.href = '/form-01?id=[[${currPatient.id}]]&password=[[${currPatient.password}]]'" class="wrapper" style="width:25%; max-width: 82px;padding: 8px 8px 8px 8px;">
+        <img src="home_logo.png">
+    </button>
+
+</div>
+<div class="container">
+    <div class="wrapper" style="margin:auto; overflow:scroll; align-items:start; max-width:570px">
+<div>
+    <br>
+    <p>
+        <span>Ime pacijenta: </span> <span th:text="${currPatient.firstName}"></span>
+    </p>
+
+    <p>
+        <span>Prezime pacijenta: </span> <span th:text="${currPatient.lastName}"></span>
+    </p>
+    <p>
+        <span>Broj telefona: </span> <span th:text="${currPatient.phoneNumber}"></span>
+    </p>
+
+
+
+</div>
+<br/>
+<h1>Pregled stanja</h1>
+<table id="recordTable" class="table table-hover">
+    <thead class="table-secondary">
+    <tr>
+        <th>Datum</th>
+        <th>Raspolozenje<br>(1-5)</th>
+        <th>Razina boli<br>(0-10)</th>
+        <th>Uzrok boli</th>
+        <th>Aktivnost</th>
+        <th>Vrsta pomoći</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="record : ${recordList}">
+        <td th:text="${#dates.format(record.date, 'yyyy-MM-dd HH:mm')}"></td>
+
+        <td th:text="${record.happinessLevel}"></td>
+
+        <td th:text="${record.painLevel}"></td>
+        <td th:text="${record.causeofPain}"></td>
+        <td th:text="${record.activity}"></td>
+        <td th:text="${record.text}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="panda.png">
+    <title>MojAsistent</title>
+</head>
+<body oncontextmenu="return false" class="snippet-body like" style="display:block">
+<div style="display:flex; justify-content:space-between;margin-bottom:24px;padding-bottom:16px">
+
+    <button onclick="javascript:history.back()" class="wrapper" style="width:25%; max-width: 82px; padding: 8px 8px 8px 8px;">
+        <img src="backarrow_logo.png">
+    </button>
+
+</div>
+
+<div style="display:flex; justify-content:center; align-items:center;height:75vh;">
+
+    <div class="wrapper">
+
+
+        <p style="margin-bottom: 16px; text-align:center; font-weight:500">
+            Pregled aktivnosti
+        </p>
+
+        <table>
+            <tr>
+                <th style="width:30%">Datum</th>
+                <th>Naziv</th>
+            </tr>
+            <tr th:each ="activityRecord: ${activityRecordList}">
+                <td  th:text="${#dates.format(activityRecord.date, 'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${activityRecord.activity}"></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

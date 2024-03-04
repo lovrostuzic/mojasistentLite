@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="panda.png">
+  <script src="src/main/resources/static/script.js"></script>
+  <title>MojAsistent</title>
+</head>
+<script>
+
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics();
+  const messaging = firebase.messaging();
+
+
+
+messaging.onMessage(async (payload) => {
+console.log('Poruka primljena. ', payload);
+const notificationTitle = payload.notification.title;
+const notificationBody = payload.notification.body;
+
+// Prikazivanje SweetAlert notiikacije
+Swal.fire({
+title: notificationTitle,
+text: notificationBody,
+imageUrl: 'resources/static/panda.png', // Postavite URL za ikonu ako je potrebno
+showDenyButton: true,
+showCancelButton: true,
+confirmButtonText: 'Popio sam',
+denyButtonText: 'Nisam popio',
+}).then(async (result) => {
+if (result.isConfirmed) {
+// Korisnik kliknuo "Popio sam"
+const token = await getTokenFromCache('/token');
+if (token) {
+  await sendDataToServer('https://mojasistenttestenvironment-e209f0bbc59e.herokuapp.com/spremiReminder', { action: 'popio', token });
+}
+} else if (result.isDenied) {
+// Korisnik kliknuo "Nisam popio"
+const token = await getTokenFromCache('/token');
+if (token) {
+  await sendDataToServer('https://mojasistenttestenvironment-e209f0bbc59e.herokuapp.com/spremiNoReminder', { action: 'nisam_popio', token });
+}
+}
+});
+});
+
+async function getTokenFromCache(tokenURL) {
+try {
+const response = await caches.match(tokenURL);
+if (response) {
+const token = await response.text();
+console.log('Token dohvaćen iz cache-a:', token);
+return token;
+} else {
+console.log('Token nije pronađen u cache-u.');
+return null;
+}
+} catch (error) {
+console.error('Error retrieving token from cache:', error);
+return null;
+}
+}
+
+async function sendDataToServer(url, data) {
+try {
+const response = await fetch(url, {
+method: 'POST',
+headers: {
+  'Content-Type': 'application/json',
+},
+body: JSON.stringify(data),
+});
+
+console.log('Server response:', response);
+} catch (error) {
+console.error('Error sending data:', error);
+}
+}
+</script>
+<body oncontextmenu="return false" class="snippet-body like" style="background:linear-gradient(#ffc100,#ff9a00, #ff7400)">
+<div class="flex1">
+  <button onclick="javascript:history.back()" class="wrapper" style="width:25%; max-width: 82px; padding: 8px 8px 8px 8px;">
+    <img src="backarrow_logo.png">
+  </button>
+
+  <button th:onclick="window.location.href = '/form-01?id=[[${currPatient.id}]]&password=[[${currPatient.password}]]'" class="wrapper" style="width:25%; max-width: 82px;padding: 8px 8px 8px 8px;">
+    <img src="home_logo.png">
+  </button>
+
+</div>
+<div class="flex2">
+
+<div class="wrapper">
+
+
+  <p style="margin-bottom: 16px; text-align:center; font-weight:500">
+    Kako bi opisali svoju bol?
+  </p>
+  <div class="wrapper2" style="background-color:#FAF8F1">
+    <div class="help-tip">
+      <p>
+        Snažna duboka bol, kao prosječna zubobolja, bol od svježeg pčelinjeg uboda, ili od posjekotine kuhinjskim nožem. Bol je tako jaka da je primjećujete cijelo vrijeme i ne možete se u potpunosti prilagoditi na nju.
+      </p>
+    </div>
+
+    <button onclick = "window.location.href = '/toCauseOfPain?painLevel=4'" class="button-pain2" style="background-color:#FAF8F1; color:black;">Uznemirujuća</button>
+
+
+  </div>
+  <div class="wrapper2"  style="background-color:#FAEAB1">
+    <div class="help-tip">
+      <p>Snažna, duboka, prodorna bol, kao kad krivo stanete na istegnuti gležanj, ili dugotrajna križobolja. Cijelo vrijeme primjećujete bol i toliko ste zaokupljeni njenim ublažavanjem da to ograničava vaš normalan način života.
+      </p>
+    </div>
+
+    <button onclick = "window.location.href = '/toCauseOfPain?painLevel=5'" class="button-pain2" style="background-color:#FAEAB1; color:black;">Veoma uznemirujuća</button>
+
+
+
+  </div>
+  <div class="wrapper2"  style="background-color:rgb(229, 200, 150)">
+    <div class="help-tip">
+      <p>
+        Snažna, duboka, prodorna bol koja vam stalno okupira misli. Bol je usporediva s teškom glavoboljom. Teško vam je razmišljati o bilo čemu drugome osim o boli. Izbjegavate kontakte s drugim ljudima.
+      </p>
+    </div>
+
+    <button onclick = "window.location.href = '/toCauseOfPain?painLevel=6'" class="button-pain2" style="background-color:rgb(229, 200, 150); color:black;">Intenzivna</button>
+
+  </div>
+  <button class="button-legenda" onclick="window.location.href='/showLegend?ref=22'">Legenda</button>
+
+</div>
+  </div>
+
+</body>
+</html>
